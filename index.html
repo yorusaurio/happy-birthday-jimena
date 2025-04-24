@@ -15,6 +15,8 @@
       justify-content: center;
       align-items: center;
       font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
+      padding: 1rem;
     }
 
     @keyframes gradientBG {
@@ -25,21 +27,23 @@
 
     .card {
       background: rgba(255, 255, 255, 0.9);
-      padding: 2rem 3rem;
+      padding: 2rem;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       position: relative;
+      max-width: 90%;
+      width: 400px;
     }
 
     .card h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: #ff6f61;
       animation: pop 1.5s ease;
     }
 
     .card p {
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: #444;
       margin: 1rem 0;
     }
@@ -60,16 +64,33 @@
     }
 
     canvas {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
+      z-index: 0;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.5rem;
+      }
+      .card h1 {
+        font-size: 1.8rem;
+      }
+      .card p {
+        font-size: 0.95rem;
+      }
+      .emoji {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
 
+  <canvas id="confetti"></canvas>
+
   <div class="card">
-    <canvas id="confetti"></canvas>
     <h1>¡Feliz cumple, Jimena! 🎉</h1>
     <div class="emoji">🥳🎂✨</div>
     <p>¡Ya eres oficialmente mayor! Espero que tengas un día increíble lleno de sorpresas, sonrisas y buena vibra.</p>
@@ -77,7 +98,6 @@
   </div>
 
   <script>
-    // Confetti effect
     const canvas = document.getElementById('confetti');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -103,6 +123,10 @@
         p.tiltAngle += p.tiltAngleIncrement;
         p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
         p.tilt = Math.sin(p.tiltAngle - i / 3) * 15;
+        if (p.y > canvas.height) {
+          p.y = -10;
+          p.x = Math.random() * canvas.width;
+        }
         ctx.beginPath();
         ctx.lineWidth = p.r / 2;
         ctx.strokeStyle = p.color;
@@ -114,6 +138,7 @@
     }
 
     draw();
+
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
